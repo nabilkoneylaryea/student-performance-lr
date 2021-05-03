@@ -24,27 +24,35 @@ x_train, x_test, y_train, y_test = sklearn.model_selection.train_test_split(x, y
 ITERATIONS = 10
 best = 0
 
-for iteration in range(ITERATIONS):
-    print(f'### ITERATION: {iteration + 1} ###')
-    x_train, x_test, y_train, y_test = sklearn.model_selection.train_test_split(x, y, test_size=0.1) # ?? WHY DOUBLED
+def train():
+    for iteration in range(ITERATIONS):
+        print(f'### ITERATION: {iteration + 1} ###')
+        x_train, x_test, y_train, y_test = sklearn.model_selection.train_test_split(x, y, test_size=0.1) # ?? WHY DOUBLED
 
-    linear = linear_model.LinearRegression() # initialize linear regression model from sklearn
-    linear.fit(x_train, y_train) # train linear regression model
-    accuracy = linear.score(x_test, y_test) # test linear regression model
-    print('Accuracy:', accuracy)
-    
-    if accuracy > best:
-        best = accuracy
-        with open('student_model.pickle', 'wb') as f:
-            pickle.dump(linear, f) # saving model by pickling it
+        linear = linear_model.LinearRegression() # initialize linear regression model from sklearn
+        linear.fit(x_train, y_train) # train linear regression model
+        accuracy = linear.score(x_test, y_test) # test linear regression model
+        print('Accuracy:', accuracy)
         
+        if accuracy > best:
+            best = accuracy
+            with open('student_model.pickle', 'wb') as f:
+                pickle.dump(linear, f) # saving model by pickling it
+ 
+# train() # uncomment to run training loop
 pickle_in = open('student_model.pickle', 'rb')
 linear = pickle.load(pickle_in)
 
-print('Accuracy:', accuracy)
 print('Coefficients:', linear.coef_) # slope values: larger coefficients mean larger impact on result
 print('Intercept:', linear.intercept_) # y-intercept
 
-predictions = linear.predict(x_test)
+predictions = linear.predict(x_test) # plug in all testing inputs to show predictions
 for index, prediction in enumerate(predictions):
     print(prediction, x_test[index], y_test[index])
+    
+style.use('ggplot') # style for nicer plot
+feature = 'studytime' # attribute from data to plot
+plt.scatter(data[feature], data['G3']) # putting x-data and y-data in plot
+plt.xlabel(feature)
+plt.ylabel('Final Grade')
+plt.show()

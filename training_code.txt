@@ -1,9 +1,0 @@
-linear = linear_model.LinearRegression() # initialize linear regression model from sklearn
-
-linear.fit(x_train, y_train) # train linear regression model
-accuracy = linear.score(x_test, y_test) # test linear regression model
-
-print('Accuracy:', accuracy)
-
-with open('student_model.pickle', 'wb') as f:
-    pickle.dump(linear, f)
